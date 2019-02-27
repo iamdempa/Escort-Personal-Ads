@@ -99,13 +99,13 @@
 
             $resultPerPage = 5;
 
-            $sql2 = "SELECT * FROM ad WHERE userid=? AND adstatus=?";
+            $sql2 = "SELECT * FROM ad WHERE userid=?";
 
-            $success = "success";
+            $success = "pending";
 
             $stmt2 = mysqli_stmt_init($conn);
             mysqli_stmt_prepare($stmt2, $sql2);
-            mysqli_stmt_bind_param($stmt2, "is", $userIdd, $success);
+            mysqli_stmt_bind_param($stmt2, "i", $userIdd);
             mysqli_stmt_execute($stmt2);
 
             $result2 = mysqli_stmt_get_result($stmt2);
@@ -120,7 +120,7 @@
 
             $thisPageFirstResult = ($page - 1) * $resultPerPage;
 
-            $sql = "SELECT * FROM ad WHERE userid=? AND adstatus=? LIMIT  " . $thisPageFirstResult . "," . $resultPerPage . ";";
+            $sql = "SELECT * FROM ad WHERE userid=?  LIMIT  " . $thisPageFirstResult . "," . $resultPerPage . ";";
 
 
             $stmt = mysqli_stmt_init($conn);
@@ -128,8 +128,8 @@
             if (!mysqli_stmt_prepare($stmt, $sql)) {
                 echo 'error';
             } else {
-                $success = "success";
-                mysqli_stmt_bind_param($stmt, "is", $userIdd, $success);
+                $success = "pending";
+                mysqli_stmt_bind_param($stmt, "i", $userIdd);
                 mysqli_stmt_execute($stmt);
 
                 $result = mysqli_stmt_get_result($stmt);
@@ -146,10 +146,11 @@
                     $adId = $row['adid'];
                     $sql2 = "SELECT * FROM adimage WHERE adid='$adId' AND userid='$userIdd' LIMIT 1;";
 //                    echo $adId;
-                    $resultImage = mysqli_query($conn, $sql2);
-
+                                        
+                    $resultImage = mysqli_query($conn, $sql2);                    
                     while ($rowImage = mysqli_fetch_assoc($resultImage)) { //runs only one time
                         if ($rowImage['adimagestatus'] == 0) { //profile pic set
+                            
                             $fileName = "uploads/ad/adImage-" . $rowImage['adimageid'] . "-" . $rowImage['adid'] . "-" . $rowImage['userid'] . "*";
                             $fileInfo = glob($fileName);
 
@@ -171,6 +172,14 @@
                             echo "<a class='btn btn-danger btn-sm delete' href='#' id='" . $adId . "' onclick='showDeleteConfirm(this)' role='button'>Delete</a>";
                             echo"</td>";
 
+                            echo "<td>";
+                            if ($row['adstatus'] == "pending") {
+                                echo 'pending';
+                            } else {
+                                echo 'Approved';
+                            }
+                            echo"</td>";
+
                             echo "</tr>";
                         } else { //profile pic not set
                             echo "<td>";
@@ -186,6 +195,14 @@
                             echo "<td>";
                             echo "<a style='margin-right:5px;' class='btn btn-warning btn-sm' href='post-ad.php?editAdId=" . $rowImage['adid'] . "&userId=" . $userIdd . "' role='button'>Edit</a>";
                             echo "<a class='btn btn-danger btn-sm delete' href='#' id='" . $adId . "' onclick='showDeleteConfirm(this)' role='button'>Delete</a>";
+                            echo"</td>";
+
+                            echo "<td>";
+                            if ($row['adstatus'] == "pending") {
+                                echo 'pending';
+                            } else {
+                                echo 'Approved';
+                            }
                             echo"</td>";
 
                             echo "</tr>";
@@ -204,7 +221,7 @@
 
 
         <script type="text/javascript">
-            function showDeleteConfirm(id) {                
+            function showDeleteConfirm(id) {
                 $.confirm({
                     title: 'Delete Ad!',
                     content: 'Are you sure?',
@@ -212,9 +229,9 @@
                     buttons: {
                         Delete: function () {
 //                            $.alert('Deleted!');    
-                            
+
                             deleteAd(id);
-                            
+
                             window.location.reload(false);
                         },
                         cancel: function () {
@@ -222,11 +239,11 @@
                         }
                     }
                 });
-            } 
+            }
 
             function deleteAd(id) {
-                var adId = $(id).attr('id'); 
-                
+                var adId = $(id).attr('id');
+
                 $.ajax({
                     url: 'includes/remove-ad-inc.php',
                     dataType: 'text', // what to expect back from the PHP script, if anything                        
@@ -236,7 +253,7 @@
                     },
                     type: 'post',
                     success: function (php_script_response) {
-                        alert(php_script_response); // display response from the PHP script, if any
+                        //alert(php_script_response); // display response from the PHP script, if any
                     }
                 });
             }

@@ -13,6 +13,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="cssadmin/style2.css">                  
 
         <?php include './includesadmin/stylesheets.php'; ?>
+        
     </head>
     <body>
         <?php

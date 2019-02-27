@@ -7,11 +7,17 @@ if (session_status() == PHP_SESSION_NONE) {
 if (!isset($_SESSION['username']) && !isset($_SESSION['adid'])) {
     header("Location: index.php");
 }
-$userId = $_SESSION['userid'];
-if (!empty($_GET['updatePartOne'])) {  //if someone clicked ad edit button
+if (isset($_SESSION['admin'])) {
+    $userId = $_SESSION['userId'];
+} else {
+    $userId = $_SESSION['userid'];
+}
+
+if (!empty($_GET['updatePartOne']) || isset($_GET['updatePartOne']) == "yes" || isset($_GET['updatePartOne'])) {  //if someone clicked ad edit button
+    $adId = $_SESSION['editAdId'];
+} else if (isset($_GET['updatePartOneByAdmin']) || !empty($_GET['updatePartOneByAdmin'])) {
     $adId = $_SESSION['editAdId'];
 } else {
-
 //ID's
     $adId = $_SESSION['adid'];
 }
@@ -47,8 +53,7 @@ and open the template in the editor.
 
         <?php
         include_once './includes/header.php';
-        ?>
-
+        ?>        
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -104,7 +109,7 @@ and open the template in the editor.
                             <div class="card-body">
                                 <h2 class="card-title text-center"><i class='fa fa-phone'></i> Your contact details</h2>
                                 <?php
-                                $sql = "SELECT * FROM user WHERE userid='$userId'";
+                                $sql = "SELECT * FROM ad WHERE adid='$adId'";
 
                                 $result = mysqli_query($conn, $sql);
 
@@ -112,7 +117,7 @@ and open the template in the editor.
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<div class='form-group'>
                                     <label for='email' class='col-form-label'><i class='fa fa-envelope'></i> Email</label>
-                                    <input type='email' name='email' class='form-control' value='" . $row['userEmail'] . "' id='email' placeholder='example@gmail.com' >
+                                    <input type='email' name='email' class='form-control' value='" . $row['adcontactemail'] . "' id='email' placeholder='example@gmail.com' >
                                     <div class='email-feedback'></div>
                                 </div>";
                                         if (!empty($row['adcontactmobile'])) {
@@ -143,10 +148,10 @@ and open the template in the editor.
                                 </div>";
                                         }
 
-                                        if (!empty($row['userStreet'])) {
+                                        if (!empty($row['adstreet'])) {
                                             echo "<div class='form-group'>
                                     <label for='street' class='col-form-label'> Street</label>
-                                    <input type='text' name='street' class='form-control' id='street' value='" . $row['userStreet'] . "'>
+                                    <input type='text' name='street' class='form-control' id='street' value='" . $row['adstreet'] . "'>
                                     <div class='phone-feedback'></div>
                                 </div>";
                                         } else {
@@ -157,10 +162,10 @@ and open the template in the editor.
                                 </div>";
                                         }
 
-                                        if (!empty($row['userCity'])) {
+                                        if (!empty($row['adcity'])) {
                                             echo "<div class='form-group'>
                                     <label for='city' class='col-form-label'> City</label>
-                                    <input type='text' name='city' class='form-control' id='city' value='" . $row['userCity'] . "'>
+                                    <input type='text' name='city' class='form-control' id='city' value='" . $row['adcity'] . "'>
                                     <div class='phone-feedback'></div>
                                 </div>";
                                         } else {
@@ -171,10 +176,10 @@ and open the template in the editor.
                                 </div>";
                                         }
 
-                                        if (!empty($row['userState'])) {
+                                        if (!empty($row['adstate'])) {
                                             echo "<div class='form-group'>
                                     <label for='state' class='col-form-label'> State</label>
-                                    <input type='text' name='state' class='form-control' id='state' value='" . $row['userState'] . "'>
+                                    <input type='text' name='state' class='form-control' id='state' value='" . $row['adstate'] . "'>
                                     <div class='phone-feedback'></div>
                                 </div>";
                                         } else {
@@ -281,31 +286,45 @@ and open the template in the editor.
         <script type="text/javascript">
 
             $(document).ready(function () {
-                var email = $('#email').val();
-                var tel = $('#tel').val();
-                var teloffice = $('#teloffice').val();
-                var street = $('#street').val();
-                var city = $('#city').val();
-                var state = $('#state').val();
+                var check = localStorage.getItem("email");
+                if (check.length === 0) { //no data set
+                    alert("Data not set");
 
-                document.cookie = "email=" + email;
-                document.cookie = "tel=" + tel;
-                document.cookie = "teloffice=" + teloffice;
-                document.cookie = "street=" + street;
-                document.cookie = "city=" + city;
-                document.cookie = "state=" + state;
+                    var email = $('#email').val();
+                    var tel = $('#tel').val();
+                    var teloffice = $('#teloffice').val();
+                    var street = $('#street').val();
+                    var city = $('#city').val();
+                    var state = $('#state').val();
+
+
+                    localStorage.setItem("email", email);
+                    localStorage.setItem("tel", tel);
+                    localStorage.setItem("teloffice", teloffice);
+                    localStorage.setItem("street", street);
+                    localStorage.setItem("city", city);
+                    localStorage.setItem("state", state);
+
+                    $('#email').val(localStorage.getItem("email"));
+                    $('#tel').val(localStorage.getItem("tel"));
+                    $('#teloffice').val(localStorage.getItem("teloffice"));
+                    $('#street').val(localStorage.getItem("street"));
+                    $('#city').val(localStorage.getItem("city"));
+                    $('#state').val(localStorage.getItem("state"));
+
+                } else {
+                    $('#email').val(localStorage.getItem("email"));
+                    $('#tel').val(localStorage.getItem("tel"));
+                    $('#teloffice').val(localStorage.getItem("teloffice"));
+                    $('#street').val(localStorage.getItem("street"));
+                    $('#city').val(localStorage.getItem("city"));
+                    $('#state').val(localStorage.getItem("state"));
+                }
+
+
             });
         </script>
 
-        <?php
-//        echo $_SESSION['email'];
-        $email = $_COOKIE['email'];
-        $tel = $_COOKIE['tel'];
-        $teloffice = $_COOKIE['teloffice'];
-        $street = $_COOKIE['street'];
-        $city = $_COOKIE['city'];
-        $state = $_COOKIE['state'];
-        ?>
 
 
         <form id="image_form" action="#" method="POST" enctype="multipart/form-data">
@@ -509,7 +528,7 @@ and open the template in the editor.
 
 
         <?php
-        if (!empty($_GET['updatePartOne'])) {
+        if (!empty($_GET['updatePartOne'])) { //if a user update the ad
             echo "<div class = 'container'>
                 <div class = 'row'>
                 <div class = 'col-md-4 col-sm-4 col-4'></div>
@@ -521,7 +540,7 @@ and open the template in the editor.
                 <div class = 'col-md-4 col-sm-4 col-4'></div>
                 </div>
             </div>";
-        } else {
+        } else { //if admin update the part one
             echo "<div class = 'container'>
                 <div class = 'row'>
                 <div class = 'col-md-4 col-sm-4 col-4'></div>
@@ -659,30 +678,61 @@ and open the template in the editor.
                         return xhr;
                     },
                     success: function (php_script_response) {
-//                        alert(php_script_response); // display response from the PHP script, if any
+                        alert(php_script_response); // display response from the PHP script, if any
                         if (php_script_response === "" || php_script_response.length === 0) {
-                            alert("nothing");
+//                            alert("nothing");
+                            $('.' + msgId).text("Image Uploaded Successfully!");
+
                         } else {
                             if (php_script_response === "error result") {
-                                alert("Unknown Error Occured! Try again later...");
-                                window.location.reload(false);
+                                //alert("Unknown Error Occured! Try again later...");
+                                $('.' + msgId).text("Unknown Error Occured! Try again later...");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
                             } else if (php_script_response === "error size") {
-                                alert("Image size Exceeded, Upload an Image of size less than 1MB...");
-                                window.location.reload(false);
+                                //alert("Image size Exceeded, Upload an Image of size less than 1MB...");
+                                $('.' + msgId).text("Image size Exceeded, Upload an Image of size less than 1MB...");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
                             } else if (php_script_response === "error file") {
-                                alert("File error! Try again later...");
-                                window.location.reload(false);
+                                //alert("File error! Try again later...");
+                                $('.' + msgId).text("File error! Try again later...");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
                             } else if (php_script_response === "error type") {
-                                alert("Invalid file type. Upload only JPG/JPEG/PNG file types...");
-                                window.location.reload(false);
+//                                alert("Invalid file type. Upload only JPG/JPEG/PNG file types...");
+                                $('.' + msgId).text("Invalid file type. Upload only JPG/JPEG/PNG file types...");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
                             } else if (php_script_response === "error name") {
-                                alert("Invalid file name. Reanme before uplaoding...");
-                                window.location.reload(false);
+                                //alert("Invalid file name. Reanme before uplaoding...");
+                                $('.' + msgId).text("Invalid file name. Reanme before uplaoding...");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
+                            } else if (php_script_response === "nama thiyanawa") {
+                                $('.' + msgId).text("Something...");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
                             } else {
-                                alert("Unknown Error Occured! Try again later...");
-                                window.location.reload(false);
+                                $('.' + msgId).text("Image Uploaded Successfully!");
+//                                window.location.reload(false);
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 1500);
                             }
-                            $('.' + msgId).text("Image Uploaded Successfully!");
+
                         }
 
                     }

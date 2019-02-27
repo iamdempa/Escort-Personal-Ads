@@ -6,7 +6,6 @@ echo 'User id ' . $userId;
 
 if (isset($_POST['submit'])) {
 
-
     $_SESSION['submitClicked'] = "submitClicked";
     include_once './dbConnection.php';
 
@@ -76,7 +75,7 @@ if (isset($_POST['submit'])) {
     for ($index = 0; $index < count($arr); $index++) {
 
         if (!empty($arr[$index])) {//if not empty
-//            echo '-A-';
+            echo '-A-';
             $sql = "UPDATE login SET " . $arrayColumnNames[$index] . "=? WHERE userid=?;";
 
 
@@ -107,7 +106,6 @@ if (isset($_POST['submit'])) {
                 $_SESSION['edit'] = 'edit';
             }
         } else { //if they are empty
-//            echo '-B-';
             for ($index1 = 0; $index1 < count($arrayColumnNamesTwoOthers); $index1++) {
 
                 if (!empty($arrayColumnNamesTwoOthersValues[$index1])) { //if not empty
@@ -117,6 +115,21 @@ if (isset($_POST['submit'])) {
                     if (!mysqli_stmt_prepare($stmt2, $sqlUser2)) {
                         echo ' error 1';
                     } else {
+                        echo 'updated';
+                        mysqli_stmt_bind_param($stmt2, "si", $arrayColumnNamesTwoOthersValues[$index1], $userId);
+                        mysqli_stmt_execute($stmt2);
+
+                        //Start the session
+                        $_SESSION['edit'] = 'edit';
+                    }
+                } else { //if empty
+                    $sqlUser2 = "UPDATE user SET " . $arrayColumnNamesTwoOthers[$index1] . "=? WHERE userid=?;";
+
+                    $stmt2 = mysqli_stmt_init($conn);
+                    if (!mysqli_stmt_prepare($stmt2, $sqlUser2)) {
+                        echo ' error 1';
+                    } else {
+                        echo 'updated';
                         mysqli_stmt_bind_param($stmt2, "si", $arrayColumnNamesTwoOthersValues[$index1], $userId);
                         mysqli_stmt_execute($stmt2);
 
@@ -141,7 +154,7 @@ if (isset($_POST['submit'])) {
         //Start the session
         $_SESSION['edit'] = 'edit';
 
-        header("Location: ../user-profile.php?update=Success");
+//        header("Location: ../user-profile.php?update=Success&banuka=jananath");
         //exit();
     }
 } else {

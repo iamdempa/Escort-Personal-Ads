@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 include_once './dbConnection.php';
 
 if (isset($_POST['submit'])) {
-   
+
 
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $mobile = mysqli_real_escape_string($conn, $_POST['mobile']);
@@ -20,25 +20,32 @@ if (isset($_POST['submit'])) {
     $state = mysqli_real_escape_string($conn, $_POST['state']);
     $country = mysqli_real_escape_string($conn, $_POST['country']);
 
-    if($_SESSION['editAdId']){
-        $adId = $_SESSION['editAdId'];        
-    }else{
+    if ($_SESSION['editAdId']) {
+        $adId = $_SESSION['editAdId'];
+    } else {
         $adId = $_SESSION['adid'];
     }
-    
-    $userId = $_SESSION['userid'];
-    
-   
-    $AdStatus = "success";
-    $arr = array($country, $mobile, $office, $email, $street, $city, $state, $AdStatus);
-    $arrColumns = array("countryid", "adcontactmobile", "adcontactoffice", "adcontactemail", "adstreet", "adcity", "adstate", "adstatus");
 
+    $userId = $_SESSION['userid'];
+
+
+    if (!empty($_SESSION['decline']) || isset($_SESSION['decline'])) {
+        $AdStatus = "declined";
+        echo 'decline';
+    } else {
+        $AdStatus = "pending";
+    }
+
+    $adCompletion = 2;
+    $arr = array($country, $mobile, $office, $email, $street, $city, $state, $adCompletion, $AdStatus);
+    $arrColumns = array("countryid", "adcontactmobile", "adcontactoffice", "adcontactemail", "adstreet", "adcity", "adstate", "adcompletion", "adstatus");
 
     if (!empty($email) || !empty($mobile) || !empty($office)) {
         //check if what fields are empty
         for ($index1 = 0; $index1 < count($arr); $index1++) {
 
             if (!empty($arr[$index1])) {   //if not empty   
+                echo 'UPDATED-';
                 $sql = "UPDATE ad SET " . $arrColumns[$index1] . "=? WHERE adid=?;";
 
                 $stmt = mysqli_stmt_init($conn);
@@ -59,13 +66,19 @@ if (isset($_POST['submit'])) {
                                 mysqli_stmt_execute($stmt);
                             }
                         }
-                        header("Location: ../user-profile.php?addSuccess");
+                        if ((isset($_SESSION['admin']) && !isset($_SESSION['decline'])) || !empty($_SESSION['admin']) && empty($_SESSION['decline'])) {
+                            header("Location: ../AdminDashboard/new-ads.php?addUpdateSuccess=newAds");
+                        } else if (isset($_SESSION['admin']) && !empty($_SESSION['admin']) && isset($_SESSION['decline'])) {
+                            header("Location: ../AdminDashboard/declined-ads.php?addUpdateSuccess=declinedAds");
+                        } else {
+                            header("Location: ../user-profile.php?addSuccess");
+                        }
                     } else {
                         echo 'no data in ad - FIELDS';
                     }
                 }
             } else {
-                
+                echo 'FAILED-';
             }
         }
 

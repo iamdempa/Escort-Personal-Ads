@@ -26,7 +26,7 @@ and open the template in the editor.
             <div class="col-sm-4">
                 <div class="page-header float-left">
                     <div class="page-title">
-                        <h1>New Ads</h1>
+                        <h1>Declined Ads</h1>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@ and open the template in the editor.
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li class="active">New ads are <strong>declined by default</strong> until you approve.</li>
+                            <li class="active"><strong>Declined ads</strong> by the admin shows here</li>
                         </ol>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ and open the template in the editor.
 
 
         <?php
-        $sql = "SELECT * FROM ad WHERE adstatus = 'pending';";
+        $sql = "SELECT * FROM ad WHERE adstatus = 'declined';";
         $result = mysqli_query($conn, $sql);
         $resultCheck = mysqli_num_rows($result);
 
@@ -149,10 +149,10 @@ and open the template in the editor.
                         
                         <div id='banuka' class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
                           <a class='dropdown-item' href='view-ad.php?adid=" . $row['adid'] . "&userid=" . $row['userid'] . "&review=yes'><i class='fa fa-check'> Approve</i></a>                              
-                          <a class='dropdown-item' href='../post-ad.php?editAdId=".$row['adid']."&userId=".$row['userid']."&updateByAdmin'><i class='fa fa-refresh'> Update</i></a>
-                          <a class='dropdown-item' href='#'><i class='fa fa-remove'> Delete</i></a>
-                          
+                          <a class='dropdown-item' href='../post-ad.php?editAdId=".$row['adid']."&userId=".$row['userid']."&updateByAdmin&declined=yes'><i class='fa fa-refresh'> Update</i></a>
+                          <a class='dropdown-item' href='#'><i class='fa fa-remove'> Delete</i></a>                          
                         </div>
+                        
                       </div>";
                 echo "</td>";
                 echo "</tr>";

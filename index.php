@@ -9,7 +9,7 @@
         <title>Home - Escort Personal Adz</title>
 
         <!-- Bootstrap core CSS -->
-        <link href="css/main/bootstrap.css" rel="stylesheet">
+        <link href="css/main/bootstrap.css" rel="stylesheet"> 
 
         <!-- Custom styles for this template -->
         <link href="css/index/carousel.css" rel="stylesheet">

@@ -32,12 +32,18 @@ if (isset($_POST['submit']) && empty($_SESSION['editAdId'])) { //new ad
     }
 
 
+    if (isset($_SESSION['admin']) || !empty($_SESSION['admin'])) {
+        echo 'admin';
+        $userId = $_SESSION['userId'];
+        $serviceId = mysqli_real_escape_string($conn, $_POST['radios']);
+    } else {
+        $userId = $_SESSION['userid'];
+        $serviceId = mysqli_real_escape_string($conn, $_POST['radios']);
+    }
 
-    $userId = $_SESSION['userid'];
-    $serviceId = mysqli_real_escape_string($conn, $_POST['radios']);
 
 
-    $sql = "INSERT INTO ad(userid,serviceid,adtitle,addescription,adcompletion,adstatus) VALUES ('$userId','$serviceId','$title','$description',0,'pending');";
+    $sql = "INSERT INTO ad(userid,serviceid,adtitle,addescription,adcompletion,adstatus) VALUES ('$userId','$serviceId','$title','$description',1,'pending');";
 
     if (mysqli_query($conn, $sql)) {
         echo 'updated';
@@ -59,8 +65,7 @@ if (isset($_POST['submit']) && empty($_SESSION['editAdId'])) { //new ad
                     $sql = "INSERT INTO adimage(adid,adimageno,userid,adimagestatus) VALUES('$adId','$imageName','$userId',1);";
 //                    mysqli_query($conn, $sql); //put is in an if-else for error checking
                     if (mysqli_query($conn, $sql)) {
-                        header("Location: ../post-ad-2.php");
-                        
+                        header("Location: ../post-ad-2.php?partOneSuccess=yes");
                     } else {
                         echo 'Error! adimage table didnt upload';
                     }
@@ -75,13 +80,29 @@ if (isset($_POST['submit']) && empty($_SESSION['editAdId'])) { //new ad
     }
 } else { //edit ad
 //    header("Location: ../user-profile.php");
+    echo 'edit Ad';
     include_once './dbConnection.php';
+
+
+    if (isset($_SESSION['decline']) || !empty($_SESSION['decline'])) {        
+        echo 'pass';
+    } else {
+        echo 'not pass';
+    }
 
 
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $description = mysqli_real_escape_string($conn, $_POST['textarea']);
 
-    $userId = $_SESSION['userid'];
+    if (isset($_SESSION['admin']) || !empty($_SESSION['admin'])) {
+        echo 'admin';
+        $userId = $_SESSION['userId'];
+    } else {
+        $userId = $_SESSION['userid'];
+    }
+
+
+
     $editAdId = $_SESSION['editAdId'];
     $serviceId = mysqli_real_escape_string($conn, $_POST['radios']);
 
@@ -107,15 +128,23 @@ if (isset($_POST['submit']) && empty($_SESSION['editAdId'])) { //new ad
 
     $adID = $_SESSION['editAdId'];
 
-    $sql = "UPDATE ad SET serviceid='$serviceId',adtitle='$title',addescription='$description' WHERE adid=? AND userid=?";
+    $sql = "UPDATE ad SET serviceid='$serviceId',adtitle='$title',addescription='$description',adcompletion=1 WHERE adid=? AND userid=?";
+
     $stmt = mysqli_stmt_init($conn);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         echo 'update failed';
     } else {
         mysqli_stmt_bind_param($stmt, "ii", $adID, $userId);
         mysqli_stmt_execute($stmt);
+        echo $adID . "-" . $userId;
 
-        header("Location: ../post-ad-2.php?updatePartOne=success");
+        if (isset($_SESSION['admin']) && empty($_SESSION['decline'])) {
+            header("Location: ../post-ad-2.php?updatePartOneByAdmin=success");
+        }else if(isset($_SESSION['admin']) && !empty($_SESSION['decline'])){
+            header("Location: ../post-ad-2.php?updatePartOneByAdmin=success&decline=yes");
+        } else {
+            header("Location: ../post-ad-2.php?updatePartOne=success");
+        }
     }
 }
 

@@ -3,12 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/includesadmin/header-admin.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/includes/update-ad-part-one-inc.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/post-ad-2.php</file>
             <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/users.php</file>
-            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/includesadmin/dbConnection.php</file>
-            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/index-admin.php</file>
-            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/includesadmin/header-admin2.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/view-ad.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/view-user.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/ads.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/includes/user-profile-content.php</file>
             <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/includes/sign-in-inc.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/sign-in.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/includes/update-ad-part-two-inc.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/user-profile.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/index-admin.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/new-ads.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/index.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/AdminDashboard/includesadmin/stylesheets.php</file>
+            <file>file:/G:/Necessary%20Files/NetBeansProjects/Escort%20Personal%20Adz/includes/update-profile-inc.php</file>
         </group>
     </open-files>
 </project-private>

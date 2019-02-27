@@ -1,11 +1,11 @@
 .card {
-    margin-top: -5em;
+    margin-top: 1em;
 }
 
 /* IMG displaying */
 .person-card {
-    margin-top: 5em;
-    padding-top: 5em;
+    margin-top: 1em;
+    padding-top: 0em;
 }
 .person-card .card-title{
     text-align: center;

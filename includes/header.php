@@ -47,24 +47,38 @@ if (session_status() == PHP_SESSION_NONE) {
                 if (isset($_SESSION['username'])) {
                     //echo "<a class='nav-link create-account card-link' href='user-profile.php'>" . $_SESSION['username'] . " " . "<i class='fa fa-user-o'></i></a>";
 
-                    echo "<div class='dropdown show'>
+                    if (isset($_SESSION['admin']) || !empty($_SESSION['admin'])) {
+                        echo "<div class='dropdown show'>
                     <a class='btn btn-secondary dropdown-toggle' href='#' role='button' id='dropdownMenuLink' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
-                    . $_SESSION['username'] . " <i class='fa fa-user-o'></i>" . "</a>
+                        . $_SESSION['username'] . " <i class='fa fa-user-o'></i>" . "</a>
 
                     <div class = 'dropdown-menu' aria-labelledby = 'dropdownMenuLink'>
-                    <a class = 'dropdown-item' href = '../user-profile.php  '>Profile</a>
+                    <a class = 'dropdown-item' href = '../AdminDashboard/index-admin.php'>Profile</a>
                     <div class='dropdown-divider'></div>
                     <a class = 'dropdown-item' href = './includes/sign-out-inc.php'><i class='fa fa-sign-out'></i> Logout</a>
                     
                     </div>
                     </div>";
+                    } else {
+                        echo "<div class='dropdown show'>
+                    <a class='btn btn-secondary dropdown-toggle' href='#' role='button' id='dropdownMenuLink' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"
+                        . $_SESSION['username'] . " <i class='fa fa-user-o'></i>" . "</a>
+
+                    <div class = 'dropdown-menu' aria-labelledby = 'dropdownMenuLink'>
+                    <a class = 'dropdown-item' href = '../user-profile.php'>Profile</a>
+                    <div class='dropdown-divider'></div>
+                    <a class = 'dropdown-item' href = './includes/sign-out-inc.php'><i class='fa fa-sign-out'></i> Logout</a>
+                    
+                    </div>
+                    </div>";
+                    }
                 } else {
                     echo "<a class = 'nav-link create-account card-link' href = 'sign-in.php'>Sign in <i class = 'fa fa-sign-in'></i></a>";
                 }
                 ?>
 
             </form> 
-            
+
             <form method="POST" class="form-inline mt-2 mt-md-0" action="../post-ad.php?postNewAd=success">
                 <button type="submit" class="btn btn-warning">Post your Ad</button>
             </form> 

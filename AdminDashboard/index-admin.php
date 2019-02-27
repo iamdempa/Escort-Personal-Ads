@@ -13,7 +13,7 @@ if ($resultCheck < 1) {
     }
 }
 
-$sqlAd = "SELECT * FROM ad;";
+$sqlAd = "SELECT * FROM ad WHERE adstatus='success';";
 $resultAd = mysqli_query($conn, $sqlAd);
 $resultCheckAd = mysqli_num_rows($resultAd);
 $adCount = 0;
@@ -25,7 +25,7 @@ if ($resultCheckAd < 1) {
     }
 }
 
-$sqlService = "SELECT * FROM ad;";
+$sqlService = "SELECT * FROM service;";
 $resultService = mysqli_query($conn, $sqlService);
 $resultCheckService = mysqli_num_rows($resultService);
 $serviceCount = 0;
@@ -140,7 +140,7 @@ and open the template in the editor.
 
                         </div>
                         <h3 class="mb-0">
-                            <span class="count">10468</span>
+                            <span class="count">50</span>
                         </h3>
                         <p class="text-light">Total income from the Ads</p>
 

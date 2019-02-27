@@ -15,20 +15,18 @@ if (isset($_SESSION['editAdId'])) {
 } else {
     $adId = $_SESSION['adid'];
 }
+if (isset($_SESSION['admin']) || !empty($_SESSION['admin'])) {
+    $userId = $_SESSION['userId'];
+} else {
+    $userId = $_SESSION['userid'];
+}
 
-$userId = $_SESSION['userid'];
 
 //echo $adId;
 
 
-$sql = "UPDATE user SET userFName='machan' WHERE  userid=1;";
-mysqli_query($conn, $sql);
-
-
-
-
 if (isset($_FILES['file0']) && isset($_POST['imgno'])) {
-//    echo 'B';
+    echo 'hari - 1 |';
     $imageNO = $_POST['imgno'];
 
 //    echo 'mokada une';
@@ -48,29 +46,28 @@ if (isset($_FILES['file0']) && isset($_POST['imgno'])) {
     $sqlGetImageId = "SELECT * FROM adimage WHERE adid='$adId' AND userid='$userId';"; //gives 4 results
 //$imageNO = filter_input(INPUT_POST, "imgno");
 
+    
+
     $resultImage = mysqli_query($conn, $sqlGetImageId);
     $i = 0;
     $num = mysqli_num_rows($resultImage);
     $flag = True;
     if (mysqli_num_rows($resultImage) > 0) {
-//        echo 'hari';
+        echo 'hari - 2 |';
         while (($row = mysqli_fetch_assoc($resultImage)) && $flag) { //runs 4 times
             $adImageId = $row['adimageid'];
-//            echo 'harida?';
+            echo 'hari - 3 |';
 
 
-            if (($row['adimagestatus'] == 1) && ($row['adimageno'] == $imageNO)) {
-//                echo '--hi';
+            if (($row['adimagestatus'] == 1) && ($row['adimageno'] == $imageNO)) { //if image is not set
+                echo 'hari- 4 |';
 
                 uploadPhotos($conn, $fileName, $fileError, $fileSize, $fileTempName, $adImageId, $adId, $userId);
                 $flag = false;
                 exit();
-            } else {
-//                echo 'oh';
+            } else { //image is already set
+                echo 'Image Uploaded already |';
             }
-
-
-
 
 //        echo $adImageId;
         }
@@ -131,7 +128,7 @@ function uploadPhotos($conn, $fileName, $fileError, $fileSize, $fileTempName, $a
 //            header("Location: ../post-ad-2.php?uploadselectanimage");
 //            exit();
         } else {
-//            echo 'nama thiyanawa' . '<br>';
+            echo 'nama thiyanawa';
 //            header("Location: ../post-ad-2.php?uploadinvalidfiletype");
 //            exit();
         }

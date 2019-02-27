@@ -12,6 +12,7 @@ and open the template in the editor.
         <?php
         include './includesadmin/stylesheets.php';
         ?>
+        
     </head>
     <body>
         <?php

@@ -10,14 +10,20 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <title>View Ad - Escort Admin Panel</title>
 
+
         <?php
         include './includesadmin/stylesheets.php';
         ?>
+
+
     </head>
     <body>
+
         <?php
         include './includesadmin/header-admin.php';
         ?>
+
+
 
         <?php
         if (isset($_GET['review']) == "yes" || isset($_GET['review'])) { //new ad, not reviewed yet, status = pending
@@ -27,23 +33,27 @@ and open the template in the editor.
                 <li class='breadcrumb-item active' aria-current='page'>Review Ads</li>
             </ol>
         </nav>";
-            
+
+
             include './includesadmin/ad-inc.php';
-            
-            
-        } else { //reviewed ad status = success
+        } else if (isset($_GET['view']) == "yes" || isset($_GET['view'])) { //reviewed ad status = success
             echo "<nav aria-label='breadcrumb'>
             <ol class='breadcrumb'>
-                <li class='breadcrumb-item'><a href='ads.php'><i class='fa fa-chevron-left'> Ads</i></a></li>
-                <li class='breadcrumb-item active' aria-current='page'>View Ads</li>
+                <li class='breadcrumb-item'><a href='ads.php'><i class='fa fa-chevron-left'> Approved Ads</i></a></li>
+                <li class='breadcrumb-item active' aria-current='page'>Review Ads</li>
+            </ol>
+        </nav>";
+
+            include './includesadmin/ad-inc2.php';
+        } else if (isset($_GET['decline']) == "yes" || isset($_GET['decline'])) { //declined ads = declined
+            echo "<nav aria-label='breadcrumb'>
+            <ol class='breadcrumb'>
+                <li class='breadcrumb-item'><a href='ads.php'><i class='fa fa-chevron-left'> Declined Ads</i></a></li>
+                <li class='breadcrumb-item active' aria-current='page'>Review Ads</li>
             </ol>
         </nav>";
         }
-        ?>
-
-
-        
-
+        ?>     
 
         <?php
         include './includesadmin/header-admin2.php';
@@ -53,5 +63,6 @@ and open the template in the editor.
         <?php
         include './includesadmin/javascript-sheets.php';
         ?>
+
     </body>
 </html>

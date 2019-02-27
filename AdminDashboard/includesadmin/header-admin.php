@@ -3,7 +3,6 @@
 include 'includesadmin/stylesheets.php';
 ?>
 
-
 <?php
 include 'includesadmin/dbConnection.php';
 $sql = "SELECT * FROM ad WHERE adstatus = 'pending';";
@@ -11,7 +10,7 @@ $result = mysqli_query($conn, $sql);
 $resultCheck = mysqli_num_rows($result);
 $count = 0;
 if ($resultCheck < 1) {
-    echo 'No new Ads';
+//    echo 'No new Ads';
 } else {
     while ($row = mysqli_fetch_assoc($result)) {
         $count++;
@@ -49,7 +48,9 @@ if ($resultCheck < 1) {
 
                         <li><i class="menu-icon fa fa-bell"></i><a href="./new-ads.php"><span class="badge badge-danger"><?php echo $count; ?></span> New Ads</a></li>
 
-                        <li><i class="menu-icon fa fa-eye"></i><a href="./ads.php">View Ads</a></li>
+                        <li><i class="menu-icon fa fa-check"></i><a href="./ads.php">Posted Ads</a></li>
+                        
+                        <li><i class="menu-icon fa fa-trash"></i><a href="./declined-ads.php">Declined Ads</a></li>
                     </ul>
                 </li>
 
@@ -88,7 +89,7 @@ if ($resultCheck < 1) {
                     <div class="user-menu dropdown-menu">
                         <a class="nav-link" href="../index-admin.php"><i class="fa fa-user"></i> My Profile</a>
 
-                        <a class="nav-link" href="#"><i class="fa fa-power-off"></i> Logout</a>
+                        <a class="nav-link" href="includesadmin/admin-signout-inc.php"><i class="fa fa-power-off"></i> Logout</a>
                     </div>
                 </div>
 

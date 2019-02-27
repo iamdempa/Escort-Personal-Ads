@@ -10,7 +10,7 @@ if (isset($_POST['submit'])) {
     $password = mysqli_real_escape_string($conn, $_POST['inputPassword']);
 
     //check if empty
-    if (empty($email) || empty($password)) {        
+    if (empty($email) || empty($password)) {
         header("Location: ../sign-in.php?loginEmpty");
         exit();
     } else {
@@ -35,8 +35,12 @@ if (isset($_POST['submit'])) {
                     $_SESSION['useremail'] = $row['useremail'];
                     $_SESSION['userid'] = $row['userid'];
 
-                    header("Location: ../user-profile.php?loginSuccess");
-                    exit();
+                    if ($email == "escortpersonaladz@gmail.com") {
+                        $_SESSION['admin'] = "admin";
+                        header("Location: ../AdminDashboard/index-admin.php?loginSuccess");
+                    } else {
+                        header("Location: ../user-profile.php?loginSuccess");
+                    }
                 }
             }
         }
